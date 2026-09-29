@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Glimmer",
+    "slug": "glimmer",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "dev.glimmer.app",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "dev.glimmer.app"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-asset"
+    ]
+  }
+}

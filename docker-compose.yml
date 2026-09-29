@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment: { POSTGRES_USER: glimmer, POSTGRES_PASSWORD: glimmer, POSTGRES_DB: glimmer }
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U glimmer"], interval: 3s, retries: 20 }
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+  server:
+    build: ./server
+    depends_on: { postgres: { condition: service_healthy }, redis: { condition: service_started } }
+    environment:
+      DATABASE_URL: postgres://glimmer:glimmer@postgres:5432/glimmer
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-real-life}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      CORS_ORIGIN: http://localhost:3000
+      REVENUECAT_WEBHOOK_SECRET: ${REVENUECAT_WEBHOOK_SECRET:-}
+    ports: ["4000:4000"]
+volumes:
+  pgdata:
